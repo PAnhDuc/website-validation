@@ -6,8 +6,7 @@
     "test": "jest --coverage --verbose"
   },
   "devDependencies": {
-    "eslint": "^8.51.0",
-    "mocha": "^10.2.0",
-    "chai": "^4.3.7"
+    "eslint": "^8.57.1",
+    "jest": "^29.0.3"
   }
 }

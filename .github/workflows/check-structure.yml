@@ -11,27 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code từ repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 4. Check project structure
       - name: Validate project structure
         run: |
           echo "🔍 Checking project structure..."
           node check-structure.js || true
 
-      # 5. Check coding convention (ESLint)
       - name: Run ESLint (Coding Convention)
         run: |
           echo "🔍 Running coding convention check with ESLint..."
@@ -44,7 +39,6 @@ jobs:
             echo "🎉 No issues detected in coding convention."
           fi
 
-      # 6. Check logic code (Jest tests)
       - name: Run Jest tests (Logic Validation)
         run: |
           echo "🔍 Running logic validation tests..."
@@ -57,6 +51,5 @@ jobs:
             echo "🎉 All logic validation tests passed."
           fi
 
-      # 7. Always mark the job as successful
       - name: Complete job
         run: echo "All checks completed."
