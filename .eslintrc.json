@@ -3,15 +3,15 @@
     "es2021": true,
     "node": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended"],
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
   "rules": {
-    "no-console": "warn",
     "no-unused-vars": "warn",
+    "no-console": "warn",
     "no-undef": "error"
   },
-  "ignorePatterns": ["node_modules/", "test/", "*.config.js", "check-structure.js"]
+  "ignorePatterns": ["node_modules/", "dist/", "build/", "coverage/"]
 }

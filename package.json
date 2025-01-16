@@ -2,7 +2,7 @@
   "name": "website-validation",
   "version": "1.0.0",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "test": "mocha --reporter spec"
   },
   "devDependencies": {
