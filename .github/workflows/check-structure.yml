@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Kiểm tra code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -20,7 +20,12 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install eslint stylelint htmlhint --save-dev
+
+      - name: Set execute permissions
+        run: chmod +x ./node_modules/.bin/*
 
       - name: Validate project structure
         run: |
@@ -38,17 +43,6 @@ jobs:
             echo "⚠️ No JavaScript files found. Skipping ESLint."
           fi
 
-      - name: Run htmlhint (HTML Coding Convention)
-        run: |
-          echo "🔍 Checking for HTML files..."
-          html_files=$(find . -type f -name "*.html")
-          if [ -n "$html_files" ]; then
-            echo "🔍 Running htmlhint for HTML files..."
-            npx htmlhint "**/*.html" || exit 1
-          else
-            echo "⚠️ No HTML files found. Skipping htmlhint."
-          fi
-
       - name: Run stylelint (CSS Coding Convention)
         run: |
           echo "🔍 Checking for CSS files..."
@@ -60,6 +54,16 @@ jobs:
             echo "⚠️ No CSS files found. Skipping stylelint."
           fi
 
+      - name: Run htmlhint (HTML Coding Convention)
+        run: |
+          echo "🔍 Checking for HTML files..."
+          html_files=$(find . -type f -name "*.html")
+          if [ -n "$html_files" ]; then
+            echo "🔍 Running htmlhint for HTML files..."
+            npx htmlhint "**/*.html" || exit 1
+          else
+            echo "⚠️ No HTML files found. Skipping htmlhint."
+          fi
 
       - name: Run Jest tests (Logic Validation)
         run: |
