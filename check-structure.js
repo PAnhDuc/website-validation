@@ -26,7 +26,7 @@ const checkStructure = (basePath) => {
   });
 
   if (missingItems.length > 0) {
-    console.error("\n❌ Cấu trúc dự án không hợp lệ. Thiếu:");
+    console.error("\n❌ Cấu trúc dự án không hợp lệ. Bạn đã bị thiếu file:");
     missingItems.forEach((item) => console.error(`  - ${item}`));
     process.exit(1); // Thoát nếu cấu trúc không hợp lệ
   } else {
