@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}' --format stylish || true",
-    "test": "mocha --reporter spec"
+    "test": "jest --coverage --verbose"
   },
   "devDependencies": {
     "eslint": "^8.51.0",
