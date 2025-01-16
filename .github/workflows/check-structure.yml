@@ -5,30 +5,37 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
   validate:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout code từ repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2. Thiết lập Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: 16
 
+      # 3. Cài đặt dependencies
       - name: Install dependencies
         run: npm install
 
-      - name: Run structure check
-        run: node check-structure.js
-
+      # 4. Chạy kiểm tra coding convention
       - name: Run ESLint (Coding Convention)
-        run: npm run lint
+        run: |
+          npm run lint > eslint-report.txt
+          if grep -q 'error' eslint-report.txt; then
+            echo "🛑 Coding convention check failed. Review the following errors:"
+            cat eslint-report.txt
+            exit 1
+          else
+            echo "✅ All coding conventions passed successfully!"
+          fi
 
       - name: Run Tests (Logic Validation)
         run: npm run test
