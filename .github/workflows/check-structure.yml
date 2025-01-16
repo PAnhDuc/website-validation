@@ -1,4 +1,4 @@
-name: Kiểm tra dự án
+name: Validate Project
 
 on:
   push:
@@ -11,45 +11,65 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Kiểm tra mã nguồn
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Thiết lập Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: Cài đặt các gói phụ thuộc
+      - name: Install dependencies
         run: npm install
 
-      - name: Kiểm tra cấu trúc dự án
+      - name: Validate project structure
         run: |
-          echo "🔍 Đang kiểm tra cấu trúc dự án..."
+          echo "🔍 Checking project structure..."
           node check-structure.js || exit 1
 
-      - name: Chạy ESLint (Kiểm tra coding convention)
+      - name: Run ESLint (JavaScript Coding Convention)
         run: |
-          echo "🔍 Đang kiểm tra coding convention bằng ESLint..."
-          npm run lint > eslint-report.txt || exit 1
-          echo "✅ Đã hoàn thành kiểm tra coding convention."
-          if grep -q 'error' eslint-report.txt; then
-            echo "⚠️ Phát hiện lỗi trong coding convention!"
-            cat eslint-report.txt
+          echo "🔍 Checking for JavaScript files..."
+          js_files=$(find . -type f -name "*.js" -o -name "*.jsx")
+          if [ -n "$js_files" ]; then
+            echo "🔍 Running ESLint for JavaScript files..."
+            npx eslint "**/*.js" --format stylish || exit 1
           else
-            echo "🎉 Không có lỗi trong coding convention."
+            echo "⚠️ No JavaScript files found. Skipping ESLint."
           fi
 
-      - name: Chạy Jest tests (Kiểm tra logic code)
+      - name: Run htmlhint (HTML Coding Convention)
         run: |
-          echo "🔍 Đang kiểm tra logic code với các bài kiểm tra..."
-          npm test > jest-report.txt || exit 1
-          echo "✅ Đã hoàn thành kiểm tra logic code."
-          if grep -q 'FAIL' jest-report.txt; then
-            echo "⚠️ Phát hiện lỗi logic code!"
-            cat jest-report.txt
+          echo "🔍 Checking for HTML files..."
+          html_files=$(find . -type f -name "*.html")
+          if [ -n "$html_files" ]; then
+            echo "🔍 Running htmlhint for HTML files..."
+            npx htmlhint "**/*.html" || exit 1
           else
-            echo "🎉 Tất cả các bài kiểm tra logic code đã vượt qua."
+            echo "⚠️ No HTML files found. Skipping htmlhint."
           fi
 
-      - name: Hoàn thành công việc
-        run: echo "Tất cả các bước kiểm tra đã hoàn thành."
+      - name: Run stylelint (CSS Coding Convention)
+        run: |
+          echo "🔍 Checking for CSS files..."
+          css_files=$(find . -type f -name "*.css")
+          if [ -n "$css_files" ]; then
+            echo "🔍 Running stylelint for CSS files..."
+            npx stylelint "**/*.css" || exit 1
+          else
+            echo "⚠️ No CSS files found. Skipping stylelint."
+          fi
+
+      - name: Run Jest tests (Logic Validation)
+        run: |
+          echo "🔍 Checking for test files..."
+          test_files=$(find . -type f -name "*.test.js" -o -name "*.test.jsx")
+          if [ -n "$test_files" ]; then
+            echo "🔍 Running Jest tests for logic validation..."
+            npm test || exit 1
+          else
+            echo "⚠️ No test files found. Skipping Jest tests."
+          fi
+
+      - name: Complete Validation
+        run: echo "✅ All validation checks completed successfully."
