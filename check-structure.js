@@ -1,13 +1,13 @@
 const fs = require('fs');
 
 const requiredDirectories = [
-  'public',
-  'src',
-  'src/assets',
-  'src/components',
-  'src/pages',
-  'src/styles',
-  'src/utils'
+  'styles',
+  'scripts',
+  'assets',
+  'assets/images',
+  'assets/fonts',
+  'assets/icons',
+  'index.html'
 ];
 
 function checkDirectoryStructure() {
@@ -19,11 +19,11 @@ function checkDirectoryStructure() {
   });
 
   if (missingDirs.length > 0) {
-    console.log('❌ Missing required directories:');
+    console.log('❌ Cấu trúc thư mục trong dự án không đúng:');
     missingDirs.forEach((dir) => console.log(`- ${dir}`));
     process.exitCode = 1;
   } else {
-    console.log('✅ Project directory structure is valid.');
+    console.log('✅ Cấu trúc thư mục trong dự án của bạn đã đúng.');
   }
 }
 
