@@ -8,5 +8,10 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "rules": {}
+  "rules": {
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "no-undef": "error"
+  },
+  "ignorePatterns": ["node_modules/", "test/", "*.config.js", "check-structure.js"]
 }
