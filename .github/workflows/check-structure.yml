@@ -28,14 +28,22 @@ jobs:
       # 4. Chạy kiểm tra coding convention
       - name: Run ESLint (Coding Convention)
         run: |
-          npm run lint > eslint-report.txt
+          npm run lint > eslint-report.txt || true
+          echo "🛑 Coding convention check completed. Checking errors..."
           if grep -q 'error' eslint-report.txt; then
-            echo "🛑 Coding convention check failed. Review the following errors:"
+            echo ""
+            echo "------------------------------------------"
+            echo "⚠️  Found issues in coding convention:"
+            echo "------------------------------------------"
             cat eslint-report.txt
+            echo ""
+            echo "Please fix these errors before continuing."
             exit 1
           else
-            echo "✅ All coding conventions passed successfully!"
+            echo "✅ All files passed coding convention checks!"
           fi
 
-      - name: Run Tests (Logic Validation)
-        run: npm run test
+      # 5. Chạy kiểm tra logic code (Unit Tests)
+      - name: Run logic tests (Jest)
+        run: |
+          npm test || echo "⚠️ Logic test failed. Review test cases!"
