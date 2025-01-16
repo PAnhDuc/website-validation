@@ -1,4 +1,4 @@
-name: Validate Project
+name: Kiểm tra dự án
 
 on:
   push:
@@ -11,45 +11,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Kiểm tra mã nguồn
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Thiết lập Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: Install dependencies
+      - name: Cài đặt các gói phụ thuộc
         run: npm install
 
-      - name: Validate project structure
+      - name: Kiểm tra cấu trúc dự án
         run: |
-          echo "🔍 Checking project structure..."
+          echo "🔍 Đang kiểm tra cấu trúc dự án..."
           node check-structure.js || true
 
-      - name: Run ESLint (Coding Convention)
+      - name: Chạy ESLint (Kiểm tra coding convention)
         run: |
-          echo "🔍 Running coding convention check with ESLint..."
+          echo "🔍 Đang kiểm tra coding convention bằng ESLint..."
           npm run lint > eslint-report.txt || true
-          echo "✅ Coding convention check completed."
+          echo "✅ Đã hoàn thành kiểm tra coding convention."
           if grep -q 'error' eslint-report.txt; then
-            echo "⚠️ Issues detected in coding convention!"
+            echo "⚠️ Phát hiện lỗi trong coding convention!"
             cat eslint-report.txt
           else
-            echo "🎉 No issues detected in coding convention."
+            echo "🎉 Không có lỗi trong coding convention."
           fi
 
-      - name: Run Jest tests (Logic Validation)
+      - name: Chạy Jest tests (Kiểm tra logic code)
         run: |
-          echo "🔍 Running logic validation tests..."
+          echo "🔍 Đang kiểm tra logic code với các bài kiểm tra..."
           npm test > jest-report.txt || true
-          echo "✅ Logic validation tests completed."
+          echo "✅ Đã hoàn thành kiểm tra logic code."
           if grep -q 'FAIL' jest-report.txt; then
-            echo "⚠️ Issues detected in logic validation!"
+            echo "⚠️ Phát hiện lỗi logic code!"
             cat jest-report.txt
           else
-            echo "🎉 All logic validation tests passed."
+            echo "🎉 Tất cả các bài kiểm tra logic code đã vượt qua."
           fi
 
-      - name: Complete job
-        run: echo "All checks completed."
+      - name: Hoàn thành công việc
+        run: echo "Tất cả các bước kiểm tra đã hoàn thành."
