@@ -25,12 +25,12 @@ jobs:
       - name: Kiểm tra cấu trúc dự án
         run: |
           echo "🔍 Đang kiểm tra cấu trúc dự án..."
-          node check-structure.js || true
+          node check-structure.js || exit 1
 
       - name: Chạy ESLint (Kiểm tra coding convention)
         run: |
           echo "🔍 Đang kiểm tra coding convention bằng ESLint..."
-          npm run lint > eslint-report.txt || true
+          npm run lint > eslint-report.txt || exit 1
           echo "✅ Đã hoàn thành kiểm tra coding convention."
           if grep -q 'error' eslint-report.txt; then
             echo "⚠️ Phát hiện lỗi trong coding convention!"
@@ -42,7 +42,7 @@ jobs:
       - name: Chạy Jest tests (Kiểm tra logic code)
         run: |
           echo "🔍 Đang kiểm tra logic code với các bài kiểm tra..."
-          npm test > jest-report.txt || true
+          npm test > jest-report.txt || exit 1
           echo "✅ Đã hoàn thành kiểm tra logic code."
           if grep -q 'FAIL' jest-report.txt; then
             echo "⚠️ Phát hiện lỗi logic code!"
