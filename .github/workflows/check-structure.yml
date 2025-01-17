@@ -35,7 +35,7 @@ jobs:
             echo "✅ Directory structure is valid."
           fi
 
-      # 3. Validate HTML files (nếu cần)
+      # 4. Validate HTML files (nếu cần)
       - name: Validate HTML files
         run: |
           echo "🔍 Checking for HTML files..."
@@ -47,7 +47,7 @@ jobs:
             echo "⚠️ No HTML files found. Skipping validation."
           fi
 
-      # 4. Validate CSS files (nếu cần)
+      # 5. Validate CSS files (nếu cần)
       - name: Validate CSS files
         run: |
           echo "🔍 Checking for CSS files..."
@@ -59,7 +59,7 @@ jobs:
             echo "⚠️ No CSS files found. Skipping validation."
           fi
 
-      # 5. Validate JavaScript files (nếu cần)
+      # 6. Validate JavaScript files (nếu cần)
       - name: Validate JavaScript files
         run: |
           echo "🔍 Checking for JavaScript files..."
@@ -71,7 +71,7 @@ jobs:
             echo "⚠️ No JavaScript files found. Skipping validation."
           fi
 
-      # 6. Deploy to GitHub Pages
+      # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
