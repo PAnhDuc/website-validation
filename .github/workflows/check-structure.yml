@@ -25,15 +25,18 @@ jobs:
         with:
           node-version: 18
 
+      # 2. Cài đặt phụ thuộc và khắc phục lỗi Husky
       - name: Install dependencies
         run: |
-          npm install
-          npm install eslint stylelint htmlhint --save-dev
+          npm ci
+          chmod +x node_modules/husky/lib/bin.js  # Cấp quyền thực thi cho Husky
+          npx husky install
 
+      # 3. Set execute permissions
       - name: Set execute permissions
         run: chmod +x ./node_modules/.bin/*
 
-      # Kiểm tra các quy ước mã nguồn
+      # 4. Kiểm tra quy ước mã nguồn
       - name: Validate project structure
         run: |
           echo "🔍 Checking project structure..."
@@ -56,7 +59,7 @@ jobs:
           css_files=$(find . -type f -name "*.css")
           if [ -n "$css_files" ]; then
             echo "🔍 Running stylelint for CSS files..."
-            npx stylelint "**/*.css" --allow-empty-input || true
+            npx stylelint "**/*.css" --allow-empty-input || exit 1
           else
             echo "⚠️ No CSS files found. Skipping stylelint."
           fi
@@ -72,13 +75,14 @@ jobs:
             echo "⚠️ No HTML files found. Skipping htmlhint."
           fi
 
+      # 5. Kiểm tra logic bằng Jest
       - name: Run Jest tests (Logic Validation)
         run: |
           echo "🔍 Checking for test files..."
           test_files=$(find . -type f -name "*test.js")
           if [ -n "$test_files" ]; then
               echo "🔍 Running Jest tests for logic validation..."
-              npm test -- --passWithNoTests --coverage --verbose || true
+              npm test -- --passWithNoTests --coverage --verbose || exit 1
           else
               echo "⚠️ No test files found. Skipping Jest tests."
           fi
