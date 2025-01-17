@@ -47,7 +47,7 @@ jobs:
           html_files=$(find . -type f -name "*.html")
           if [ -n "$html_files" ]; then
             echo "🔍 Validating HTML files..."
-            htmlhint "**/*.html" || exit 1
+            htmlhint "**/*.html" || { echo "❌ HTML validation failed"; exit 1; }
           else
             echo "⚠️ No HTML files found. Skipping validation."
           fi
@@ -59,7 +59,7 @@ jobs:
           css_files=$(find . -type f -name "*.css")
           if [ -n "$css_files" ]; then
             echo "🔍 Validating CSS files..."
-            stylelint "**/*.css" --allow-empty-input || exit 1
+            stylelint "**/*.css" --allow-empty-input || { echo "❌ CSS validation failed"; exit 1; }
           else
             echo "⚠️ No CSS files found. Skipping validation."
           fi
@@ -86,14 +86,15 @@ jobs:
           js_files=$(find . -type f -name "*.js")
           if [ -n "$js_files" ]; then
             echo "🔍 Validating JavaScript files..."
-            eslint "**/*.js" --format stylish || exit 1
+            eslint "**/*.js" --format stylish || { echo "❌ JavaScript validation failed"; exit 1; }
           else
             echo "⚠️ No JavaScript files found. Skipping validation."
           fi
 
-      # 7. Deploy to GitHub Pages
+      # 7. Deploy to GitHub Pages (only if all validations passed)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./ # Thay thế bằng thư mục bạn muốn deploy (ví dụ: dist)
+        if: success()  # Chỉ thực hiện nếu các bước trước thành công
