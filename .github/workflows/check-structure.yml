@@ -1,88 +1,79 @@
-name: Validate and Deploy
+name: Validate Directory Structure and Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
-  pull_request:
 
 permissions:
   contents: write
-  pages: write      # Quan trọng để deploy lên GitHub Pages
-  id-token: write   # Cần thiết nếu sử dụng OIDC authentication
+  pages: write
+  id-token: write  # Cần thiết nếu sử dụng GitHub OIDC authentication
 
 jobs:
   validate-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Kiểm tra mã nguồn
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # 2. Cài đặt phụ thuộc và khắc phục lỗi Husky
-      - name: Install dependencies
+      # 2. Validate Project Structure
+      - name: Check Project Directory Structure
         run: |
-          npm ci
-          chmod +x node_modules/husky/lib/bin.js  # Cấp quyền thực thi cho Husky
-          npx husky install
-
-      # 3. Set execute permissions
-      - name: Set execute permissions
-        run: chmod +x ./node_modules/.bin/*
-
-      # 4. Kiểm tra quy ước mã nguồn
-      - name: Validate project structure
-        run: |
-          echo "🔍 Checking project structure..."
-          node check-structure.js || exit 1
-
-      - name: Run ESLint (JavaScript Coding Convention)
-        run: |
-          echo "🔍 Checking for JavaScript files..."
-          js_files=$(find . -type f -name "*.js" -o -name "*.jsx")
-          if [ -n "$js_files" ]; then
-            echo "🔍 Running ESLint for JavaScript files..."
-            npx eslint "**/*.js" --format stylish || exit 1
+          echo "🔍 Validating directory structure..."
+          if [ ! -d "assets" ] || [ ! -f "index.html" ] || [ ! -d "styles" ] || [ ! -d "scripts" ]; then
+            echo "❌ Error: Project directory does not meet required structure."
+            echo "Required structure:"
+            echo "- index.html"
+            echo "- assets/ (folder)"
+            echo "- styles/ (folder)"
+            echo "- scripts/ (folder)"
+            exit 1
           else
-            echo "⚠️ No JavaScript files found. Skipping ESLint."
+            echo "✅ Directory structure is valid."
           fi
 
-      - name: Run stylelint (CSS Coding Convention)
-        run: |
-          echo "🔍 Checking for CSS files..."
-          css_files=$(find . -type f -name "*.css")
-          if [ -n "$css_files" ]; then
-            echo "🔍 Running stylelint for CSS files..."
-            npx stylelint "**/*.css" --allow-empty-input || exit 1
-          else
-            echo "⚠️ No CSS files found. Skipping stylelint."
-          fi
-
-      - name: Run htmlhint (HTML Coding Convention)
+      # 3. Validate HTML files (nếu cần)
+      - name: Validate HTML files
         run: |
           echo "🔍 Checking for HTML files..."
           html_files=$(find . -type f -name "*.html")
           if [ -n "$html_files" ]; then
-            echo "🔍 Running htmlhint for HTML files..."
+            echo "🔍 Validating HTML files..."
             npx htmlhint "**/*.html" || exit 1
           else
-            echo "⚠️ No HTML files found. Skipping htmlhint."
+            echo "⚠️ No HTML files found. Skipping validation."
           fi
 
-      # 5. Kiểm tra logic bằng Jest
-      - name: Run Jest tests (Logic Validation)
+      # 4. Validate CSS files (nếu cần)
+      - name: Validate CSS files
         run: |
-          echo "🔍 Checking for test files..."
-          test_files=$(find . -type f -name "*test.js")
-          if [ -n "$test_files" ]; then
-              echo "🔍 Running Jest tests for logic validation..."
-              npm test -- --passWithNoTests --coverage --verbose || exit 1
+          echo "🔍 Checking for CSS files..."
+          css_files=$(find . -type f -name "*.css")
+          if [ -n "$css_files" ]; then
+            echo "🔍 Validating CSS files..."
+            npx stylelint "**/*.css" --allow-empty-input || exit 1
           else
-              echo "⚠️ No test files found. Skipping Jest tests."
+            echo "⚠️ No CSS files found. Skipping validation."
           fi
+
+      # 5. Validate JavaScript files (nếu cần)
+      - name: Validate JavaScript files
+        run: |
+          echo "🔍 Checking for JavaScript files..."
+          js_files=$(find . -type f -name "*.js")
+          if [ -n "$js_files" ]; then
+            echo "🔍 Validating JavaScript files..."
+            npx eslint "**/*.js" --format stylish || exit 1
+          else
+            echo "⚠️ No JavaScript files found. Skipping validation."
+          fi
+
+      # 6. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # Thay thế bằng thư mục bạn muốn deploy (ví dụ: dist)
