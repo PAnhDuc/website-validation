@@ -8,7 +8,8 @@
     "lint:css": "stylelint '**/*.css' --allow-empty-input",
     "lint:html": "htmlhint '**/*.html'",
     "validate": "npm run lint:js && npm run lint:css && npm run lint:html && npm test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "your-build-command-here"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
