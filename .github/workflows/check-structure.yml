@@ -1,4 +1,4 @@
-name: Validate Project
+name: Validate and Deploy Project
 
 on:
   push:
@@ -76,6 +76,18 @@ jobs:
               echo "⚠️ No test files found. Skipping Jest tests."
           fi
 
-
       - name: Complete Validation
         run: echo "✅ All validation checks completed successfully."
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
