@@ -68,7 +68,7 @@ jobs:
       - name: Configure ESLint
         run: |
           echo "🔍 Setting up ESLint flat configuration..."
-          echo "export default [{ \
+          echo "module.exports = [{ \
             rules: { \
               'no-unused-vars': 'warn', \
               'no-console': 'off' \
