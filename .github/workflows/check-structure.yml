@@ -19,7 +19,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Validate Project Structure
+      # 2. Install htmlhint
+      - name: Install htmlhint
+        run: npm install -g htmlhint
+
+      # 3. Check Project Directory Structure
       - name: Check Project Directory Structure
         run: |
           echo "🔍 Validating directory structure..."
@@ -42,7 +46,7 @@ jobs:
           html_files=$(find . -type f -name "*.html")
           if [ -n "$html_files" ]; then
             echo "🔍 Validating HTML files..."
-            npx htmlhint "**/*.html" || exit 1
+            htmlhint "**/*.html" || exit 1
           else
             echo "⚠️ No HTML files found. Skipping validation."
           fi
