@@ -82,10 +82,3 @@ jobs:
           else
               echo "⚠️ No test files found. Skipping Jest tests."
           fi
-
-      # 2. Triển khai lên GitHub Pages
-      - name: Build the project
-        run: npm run build
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
