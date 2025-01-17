@@ -1,4 +1,4 @@
-name: Validate Project
+name: Validate and Deploy
 
 on:
   push:
@@ -6,11 +6,17 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: write
+  pages: write      # Quan trọng để deploy lên GitHub Pages
+  id-token: write   # Cần thiết nếu sử dụng OIDC authentication
+
 jobs:
-  validate:
+  validate-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Kiểm tra mã nguồn
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,6 +33,7 @@ jobs:
       - name: Set execute permissions
         run: chmod +x ./node_modules/.bin/*
 
+      # Kiểm tra các quy ước mã nguồn
       - name: Validate project structure
         run: |
           echo "🔍 Checking project structure..."
@@ -48,10 +55,10 @@ jobs:
           echo "🔍 Checking for CSS files..."
           css_files=$(find . -type f -name "*.css")
           if [ -n "$css_files" ]; then
-              echo "🔍 Running stylelint for CSS files..."
-              npx stylelint "**/*.css" --allow-empty-input || true
+            echo "🔍 Running stylelint for CSS files..."
+            npx stylelint "**/*.css" --allow-empty-input || true
           else
-              echo "⚠️ No CSS files found. Skipping stylelint."
+            echo "⚠️ No CSS files found. Skipping stylelint."
           fi
 
       - name: Run htmlhint (HTML Coding Convention)
@@ -76,6 +83,9 @@ jobs:
               echo "⚠️ No test files found. Skipping Jest tests."
           fi
 
+      # 2. Triển khai lên GitHub Pages
+      - name: Build the project
+        run: npm run build
 
-      - name: Complete Validation
-        run: echo "✅ All validation checks completed successfully."
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
