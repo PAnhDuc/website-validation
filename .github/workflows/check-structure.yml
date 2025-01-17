@@ -20,9 +20,9 @@ jobs:
         uses: actions/checkout@v3
 
       # 2. Install tools
-      - name: Install htmlhint and stylelint
+      - name: Install tools (htmlhint, stylelint, eslint)
         run: |
-          npm install -g htmlhint stylelint
+          npm install -g htmlhint stylelint eslint
 
       # 3. Check Project Directory Structure
       - name: Check Project Directory Structure
@@ -71,7 +71,7 @@ jobs:
           js_files=$(find . -type f -name "*.js")
           if [ -n "$js_files" ]; then
             echo "🔍 Validating JavaScript files..."
-            npx eslint "**/*.js" --format stylish || exit 1
+            eslint "**/*.js" --format stylish || exit 1
           else
             echo "⚠️ No JavaScript files found. Skipping validation."
           fi
