@@ -68,7 +68,17 @@ jobs:
       - name: Configure ESLint
         run: |
           echo "🔍 Setting up ESLint flat configuration..."
-          echo "module.exports = [{ rules: { 'no-unused-vars': 'warn', 'no-console': 'off' }, env: { browser: true, es2021: true }, parserOptions: { ecmaVersion: 12 } }];" > eslint.config.js
+          echo "export default [{ \
+            rules: { \
+              'no-unused-vars': 'warn', \
+              'no-console': 'off' \
+            }, \
+            languageOptions: { \
+              ecmaVersion: 12, \
+              sourceType: 'module',\
+              globals: { browser: true } \
+            } \
+          }];" > eslint.config.js
 
       - name: Validate JavaScript files
         run: |
