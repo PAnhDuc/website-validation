@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}' --format stylish || true",
-    "test": "jest --passWithNoTests --coverage",
+    "test": "react-scripts test",
     "lint:js": "eslint '**/*.js'",
     "lint:css": "stylelint '**/*.css' --allow-empty-input",
     "lint:html": "htmlhint '**/*.html'",
@@ -11,7 +11,6 @@
     "prepare": "husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
@@ -19,6 +18,7 @@
     "htmlhint": "^1.1.4",
     "husky": "^8.0.0",
     "jest": "^29.7.0",
+    "react-scripts": "^5.0.1",
     "stylelint": "^16.13.2",
     "stylelint-config-standard": "^37.0.0"
   }
