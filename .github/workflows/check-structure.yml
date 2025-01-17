@@ -28,6 +28,9 @@ jobs:
           npm install
           npm install eslint stylelint htmlhint --save-dev
 
+      - name: Set execute permissions
+        run: chmod +x ./node_modules/.bin/*
+
       - name: Validate project structure
         run: |
           echo "🔍 Checking project structure..."
