@@ -19,9 +19,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Install htmlhint
-      - name: Install htmlhint
-        run: npm install -g htmlhint
+      # 2. Install tools
+      - name: Install htmlhint and stylelint
+        run: |
+          npm install -g htmlhint stylelint
 
       # 3. Check Project Directory Structure
       - name: Check Project Directory Structure
@@ -58,7 +59,7 @@ jobs:
           css_files=$(find . -type f -name "*.css")
           if [ -n "$css_files" ]; then
             echo "🔍 Validating CSS files..."
-            npx stylelint "**/*.css" --allow-empty-input || exit 1
+            stylelint "**/*.css" --allow-empty-input || exit 1
           else
             echo "⚠️ No CSS files found. Skipping validation."
           fi
