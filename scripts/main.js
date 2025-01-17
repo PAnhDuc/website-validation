@@ -1,4 +1,4 @@
-calculateArea(length, width) {
+function calculateArea(length, width) {
     if (length || width <= 0) {
         return "Invalid dimensions!";
     }
