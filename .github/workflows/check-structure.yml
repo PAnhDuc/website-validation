@@ -65,6 +65,11 @@ jobs:
           fi
 
       # 6. Validate JavaScript files (nếu cần)
+      - name: Configure ESLint
+        run: |
+          echo "🔍 Setting up ESLint configuration..."
+          echo "module.exports = { extends: 'eslint:recommended', env: { browser: true, node: true, es2021: true }, parserOptions: { ecmaVersion: 12, sourceType: 'module' } };" > eslint.config.js
+
       - name: Validate JavaScript files
         run: |
           echo "🔍 Checking for JavaScript files..."
