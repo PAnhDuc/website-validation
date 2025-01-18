@@ -8,3 +8,8 @@ body .text-desc {
     color: red;
     font-weight: 700;
 }
+
+body span {
+    color: aqua;
+    font-size: 150px;
+}
