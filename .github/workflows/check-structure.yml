@@ -22,7 +22,7 @@ jobs:
       # 2. Install tools
       - name: Install tools (htmlhint, stylelint, eslint)
         run: |
-          npm install -g htmlhint stylelint eslint
+          npm install -g htmlhint stylelint eslint stylelint-config-standard
 
       # 3. Check Project Directory Structure
       - name: Check Project Directory Structure
@@ -53,6 +53,12 @@ jobs:
           fi
 
       # 5. Validate CSS files (nếu cần)
+      - name: Configure Stylelint
+        run: |
+          echo "{
+            \"extends\": \"stylelint-config-standard\"
+          }" > .stylelintrc.json
+
       - name: Validate CSS files
         run: |
           echo "🔍 Checking for CSS files..."
